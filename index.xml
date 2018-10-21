@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<index version="1" name="ReaScriptRU" commit="bff87eb3f597131405348c79f871fe9cc224adf4">
+  <category name="Items Editing">
+    <reapack name="Archie_Split selected items under mouse cursor (select left).lua" type="script" desc="Split selected items under mouse cursor (select left)">
+      <metadata>
+        <description><![CDATA[{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1056?\u1072?\u1079?\u1076?\u1077?\u1083?\u1080?\u1090?\u1100? \u1074?\u1099?\u1073?\u1088?\u1072?\u1085?\u1085?\u1099?\u1081? \u1101?\u1083?\u1077?\u1084?\u1077?\u1085?\u1090? \u1087?\u1086?\u1076? \u1082?\u1091?\u1088?\u1089?\u1086?\u1088?\u1086?\u1084? \u1084?\u1099?\u1096?\u1080? \u1080? \u1074?\u1089?\u1077? \u1074?\u1099?\u1073?\u1088?\u1072?\u1085?\u1085?\u1099?\u1077? \u1101?\u1083?\u1077?\u1084?\u1077?\u1085?\u1090?\u1099? \u1074? \u1101?\u1090?\u1086?\u1081? \u1087?\u1086?\u1079?\u1080?\u1094?\u1080?\u1080? (\u1074?\u1099?\u1073?\u1088?\u1072?\u1090?\u1100? \u1089?\u1083?\u1077?\u1074?\u1072?)\par}
+}
+]]></description>
+        <link rel="website">https://rmmedia.ru/threads/118091/page-76#post-2287461</link>
+      </metadata>
+      <version name="1.0" author="Archie" time="2018-10-21T06:36:59Z">
+        <changelog><![CDATA[init]]></changelog>
+        <source main="main">https://github.com/ReaScriptsRU/ReaScriptsRU/raw/bff87eb3f597131405348c79f871fe9cc224adf4/Items%20Editing/Archie_Split%20selected%20items%20under%20mouse%20cursor%20(select%20left).lua</source>
+      </version>
+    </reapack>
+  </category>
+</index>
