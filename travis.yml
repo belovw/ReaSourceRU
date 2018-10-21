@@ -10,6 +10,6 @@ install: gem install reapack-index --pre
 script: reapack-index --check
 deploy:
   provider: script
-  script: .travis/deploy.sh
+  script: travis/deploy.sh
   on:
     branch: master
