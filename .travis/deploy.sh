@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-echo $DEPLOY_KEY_PASSPHRASE | gpg --passphrase-fd 0 deploy_key.gpg
+echo $DEPLOY_KEY_PASSPHRASE | gpg --batch --passphrase-fd 0 deploy_key.gpg
 
 eval "$(ssh-agent -s)"
 chmod 600 deploy_key
@@ -12,7 +12,7 @@ ssh-add deploy_key
 
 git config push.default simple
 git config user.name 'ReaScriptsRU Bot'
-git config user.email 'reascriptsru-bot@mpl'
+git config user.email 'reascriptsru-bot@cfillion.ca'
 git remote add deploy 'git@github.com:ReaScriptsRU/ReaScriptsRU.git'
 
 git fetch --unshallow || true
