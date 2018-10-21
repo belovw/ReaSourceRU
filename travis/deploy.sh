@@ -13,7 +13,7 @@ ssh-add deploy_key
 git config push.default simple
 git config user.name 'ReaTeam Bot'
 git config user.email 'reateam-bot@cfillion.tk'
-git remote add deploy 'git@github.com:ReaTeam/ReaScripts.git'
+git remote add deploy 'git@github.com:ReaScriptsRU/ReaScriptsRU.git'
 
 git fetch --unshallow || true
 git checkout "$TRAVIS_BRANCH"
