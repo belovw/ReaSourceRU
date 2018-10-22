@@ -1,0 +1,59 @@
+desc: ORTF panner
+version: 1.1
+changelog: init commit to ReaPack
+author: Vladimir Belov
+website: http://rmmedia.ru/threads/84256/
+
+
+  
+// (C) 2011, Vladimir Belov.
+// NO WARRANTY IS GRANTED. THIS PLUG-IN IS PROVIDED ON AN "AS IS" BASIS, WITHOUT
+// WARRANTY OF ANY KIND. NO LIABILITY IS GRANTED, INCLUDING, BUT NOT LIMITED TO,
+// ANY DIRECT OR INDIRECT,  SPECIAL,  INCIDENTAL OR CONSEQUENTIAL DAMAGE ARISING
+// OUT OF  THE  USE  OR INABILITY  TO  USE  THIS PLUG-IN,  COMPUTER FAILTURE  OF
+// MALFUNCTION INCLUDED.  THE USE OF THE SOURCE CODE,  EITHER  PARTIALLY  OR  IN
+// TOTAL, IS ONLY GRANTED,  IF USED IN THE SENSE OF THE AUTHOR'S INTENTION,  AND
+// USED WITH ACKNOWLEDGEMENT OF THE AUTHOR. FURTHERMORE IS THIS PLUG-IN A  THIRD
+// PARTY CONTRIBUTION,  EVEN IF INCLUDED IN REAPER(TM),  COCKOS INCORPORATED  OR
+// ITS AFFILIATES HAVE NOTHING TO DO WITH IT.  LAST BUT NOT LEAST, BY USING THIS
+// PLUG-IN YOU RELINQUISH YOUR CLAIM TO SUE IT'S AUTHOR, AS WELL AS THE CLAIM TO
+// ENTRUST SOMEBODY ELSE WITH DOING SO.
+
+
+
+slider1:0<-125,125,1>Gradient
+//slider2:0<0,1,1{Curve,Linear}>Form
+//slider3:0<0,100,1>parameter3
+//slider4:0<0,100,1>parameter4
+//slider5:0<0,100,1>parameter5
+
+@init
+bpos=0;
+del=0;
+a3=1;
+
+@slider
+//a3=cos($pi*slider1*slider2*1.2181321182/180);
+a1=a3*0.63549503*(1+cos($pi*(55+slider1)/180));
+a2=a3*0.63549503*(1+cos($pi*(55-slider1)/180));
+d=floor(0.5+0.0005*srate*sin($pi*slider1/180));
+pdc_delay=floor(abs(d/2));
+pdc_bot_ch=0; pdc_top_ch=2;
+si=sign(slider1);
+
+@block
+blah+=samplesblock;
+
+@sample
+si==1 ? (
+      del[0]=spl0; del+=1; del>=d ? del=0;
+      spl0=del[0];
+      spl0=a1*spl0;
+      spl1=a2*spl1;
+      );
+si==-1 ? (
+      del[0]=spl1; del+=1; del>=abs(d) ? del=0;
+      spl1=del[0];
+      spl0=a1*spl0;
+      spl1=a2*spl1;
+      );

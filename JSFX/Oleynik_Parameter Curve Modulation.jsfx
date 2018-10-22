@@ -1,0 +1,54 @@
+desc: Parameter Curve Modulation
+version: 5
+changelog: init commit to ReaPack
+author: Aleksandr Oleynik
+website: https://rmmedia.ru/threads/115423/
+
+//Oleynik Plugins
+
+/* Used Function - Y = K*X+(1-K)*X^Z - for Down Curve
+and Y = -K*(1-X)-(1-K)*(1-X)^Z+1 - for Up Curve - Miror of Down*/
+
+slider1:0<0,1,0.01> In Parametr
+
+slider2:0<0,1,1{For Data,For MIDI}>Type Output
+
+slider3:1<0,2,1{Up Curve,Line,Down Curve}>Type Curve
+
+slider4:1.01<1.01,30,0.01>1 Level Curve
+
+slider5:0.01<0.01,0.99,0.01>2 Level Curve
+
+slider6:0<0,127,0.01>Out Parametr
+
+
+
+@slider
+
+X = slider1;
+
+T = slider2;
+
+F = slider3;
+
+Z = slider4;
+
+K = slider5;
+
+(F == 0)? 
+(Y = -K*(1-X)-(1-K)*(1-X)^Z+1);
+
+(F == 1)? 
+(Y = X);
+
+(F == 2)? 
+(Y = K*X+(1-K)*X^Z);
+
+(T == 0)? 
+(slider6 = Y*127);
+
+(T == 1)? 
+(slider6 = ceil(Y*127));
+
+sliderchange(slider6);
+

@@ -1,0 +1,203 @@
+desc: Stereo Imager
+version: 1.1
+changelog: init commit to ReaPack
+author: Vladimir Belov
+website: https://rmmedia.ru/threads/105176
+
+// (C) 2012, Vladimir V. Belov
+// (C) 2007, Michael Gruhn.
+
+// NO WARRANTY IS GRANTED. THIS PLUG-IN IS PROVIDED ON AN "AS IS" BASIS, WITHOUT
+// WARRANTY OF ANY KIND. NO LIABILITY IS GRANTED, INCLUDING, BUT NOT LIMITED TO,
+// ANY DIRECT OR INDIRECT,  SPECIAL,  INCIDENTAL OR CONSEQUENTIAL DAMAGE ARISING
+// OUT OF  THE  USE  OR INABILITY  TO  USE  THIS PLUG-IN,  COMPUTER FAILTURE  OF
+// MALFUNCTION INCLUDED.  THE USE OF THE SOURCE CODE,  EITHER  PARTIALLY  OR  IN
+// TOTAL, IS ONLY GRANTED,  IF USED IN THE SENSE OF THE AUTHOR'S INTENTION,  AND
+// USED WITH ACKNOWLEDGEMENT OF THE AUTHOR. FURTHERMORE IS THIS PLUG-IN A  THIRD
+// PARTY CONTRIBUTION,  EVEN IF INCLUDED IN REAPER(TM),  COCKOS INCORPORATED  OR
+// ITS AFFILIATES HAVE NOTHING TO DO WITH IT.  LAST BUT NOT LEAST, BY USING THIS
+// PLUG-IN YOU RELINQUISH YOUR CLAIM TO SUE IT'S AUTHOR, AS WELL AS THE CLAIM TO
+// ENTRUST SOMEBODY ELSE WITH DOING SO.
+// 
+// Released under GPL:
+// <http://www.gnu.org/licenses/>.
+
+
+
+slider1:<0,1,1{LR,MS}>Mode
+slider2:1<0,2,0.01>Width (%)
+slider3:0<-45,45,1>Rotate (Deg)
+slider5:0<0,2,1{Dots,Lines,Rays}>Display
+
+@init
+k=sqrt(2);
+p=$pi/180;
+
+gfx_clear=-1;
+off = 500000;
+rot=-45*0.017453292;
+DOTS = 0;
+LINES = 1;
+RAYS = 2;
+MAXDRAWSPLS = 10000;
+PHASEUPDATERATE = srate/8;
+n = 0;
+phC = 0;
+ph = 0;
+
+@slider
+width=slider2;
+
+kr=p*slider3;
+kw=atan(slider2);
+
+kcs=cos(kr);
+ksn=sin(kr);
+
+k1=sin(kr-kw);
+k2=cos(kr-kw);
+k3=sin(kr+kw);
+k4=cos(kr+kw);
+
+@block
+
+@sample
+
+//Mode
+slider1==0 ? (
+    a0=(spl0+spl1)/2;
+    a1=(spl0-spl1)/2;
+             ):(
+    a0=spl0/k;
+    a1=spl1/k;
+             );
+
+//Width
+spl0=a0+a1*width;
+spl1=a0-a1*width;
+
+//Rotate
+L=spl0*kcs-spl1*ksn;
+R=spl1*kcs+spl0*ksn;
+spl0=L;
+spl1=R;
+
+//Goniometer
+s0 = sign(spl0);
+s1 = sign(spl1);
+angle = atan( spl0 / spl1 );
+(s0 == 1 && s1 == -1) || (s0 == -1 && s1 == -1) ? angle += 3.141592654;
+s0 == -1 && s1 == 1 ? angle += 6.283185307;
+spl1 == 0 ? spl0 > 0 ? angle = 1.570796327 : angle = 4.71238898;
+spl0 == 0 ? spl1 > 0 ? angle = 0 : angle = 3.141592654;
+radius = sqrt( sqr(spl0)+sqr(spl1) ) ;
+angle -= rot;
+vert = 0[b] = cos(angle)*radius;
+horiz = off[b] = sin(angle)*radius;
+b<MAXDRAWSPLS ? b += 1;
+
+
+s0 != s1 ? phC-=1:phC+=1;
+(n+=1) > PHASEUPDATERATE ? (
+  ph = (1-(phC/n))/2;
+  phC = n = 0;
+);
+
+@gfx 500 500
+
+size = min(gfx_w,gfx_h-20);
+sizeH = size/2;
+sizeDSqr05 = sizeH * 0.70710681;
+sizeQ = sizeH/2;
+size2Q = 2*sizeQ;
+size3Q = 3*sizeQ;
+
+(mouse_cap) ? (
+  gfx_r=gfx_g=gfx_b=0; gfx_a=1;
+  gfx_x=gfx_y=0;
+  gfx_rectto(gfx_w,gfx_h);
+);
+
+gfx_r=gfx_g=gfx_b=0; gfx_a=0.066;
+gfx_x=gfx_y=0;
+gfx_rectto(gfx_w,gfx_h);
+
+x = y = sizeH;
+
+i = min(b,MAXDRAWSPLS);
+while (
+  slider5 == DOTS ? (
+  gfx_a=0.33;
+  gfx_x=sizeH+0[i]*sizeDSqr05;
+  gfx_y=sizeH-off[i]*sizeDSqr05;
+  gfx_setpixel(0.5,1,0);
+  ):(
+    slider5 == LINES ? (
+      gfx_x=x; gfx_y=y;
+      x=sizeH+0[i]*sizeDSqr05;
+      y=sizeH-off[i]*sizeDSqr05;
+    ):(
+      gfx_x=sizeH+0[i]*sizeDSqr05;
+      gfx_y=sizeH-off[i]*sizeDSqr05;
+    );
+      gfx_r=0.5; gfx_g=1; gfx_b=0; gfx_a=0.25;
+  gfx_lineto(x,y,0);
+  );
+  (i-=1)>0;
+);
+b=0;
+
+gfx_r=gfx_g=gfx_b=0.8; gfx_a=0.03;
+
+gfx_x=sizeQ; gfx_y=sizeQ;
+gfx_lineto(size3Q,size3Q,0);
+
+gfx_x=sizeQ; gfx_y=size3Q;
+gfx_lineto(size3Q,sizeQ,0);
+
+gfx_a=0.03;
+gfx_x=size2Q; gfx_y=size2Q-sizeQ*k;
+gfx_lineto(size2Q,size2Q+sizeQ*k,1);
+
+gfx_x=size2Q-sizeQ*k; gfx_y=size2Q;
+gfx_lineto(size2Q+sizeQ*k,size2Q,1);
+
+gfx_x = gfx_y = sizeQ;
+gfx_drawchar($'L');
+gfx_x = size3Q; gfx_y = sizeQ;
+gfx_drawchar($'R');
+gfx_x = sizeH; gfx_y = 5;
+gfx_drawchar($'M');
+gfx_x = 0; gfx_y = sizeH;
+gfx_drawchar($'+');
+gfx_drawchar($'S');
+gfx_x = size-20; gfx_y = sizeH;
+gfx_drawchar($'-');
+gfx_drawchar($'S');
+
+gfx_r=1; gfx_g=gfx_b=0; gfx_a=1;
+
+gfx_x=gfx_y=size2Q;
+gfx_lineto (sizeQ*(2+k1),sizeQ*(2-k2),1);
+gfx_lineto (sizeQ*(2+k3),sizeQ*(2-k4),1);
+gfx_lineto (size2Q,size2Q,1);
+gfx_lineto (sizeQ*(2+ksn*1.05),sizeQ*(2-kcs*1.05),1);
+
+gfx_r=gfx_g=gfx_b=0; gfx_a=1;
+gfx_x=0; gfx_y=size;
+gfx_rectto(size+1,size+20);
+gfx_r=1; gfx_g=0; gfx_b=0; gfx_a=1;
+gfx_x=1+ph*(size-1); gfx_y=size+1;
+gfx_lineto(gfx_x,size+19,0);
+
+gfx_r=gfx_g=gfx_b=0.8; gfx_a=1;
+gfx_x = 0; gfx_y = size+10;
+gfx_drawnumber(0,0);
+gfx_x = sizeH-8; gfx_y = size+10;
+gfx_drawnumber(90,0);
+gfx_x = size-25; gfx_y = size+10;
+gfx_drawnumber(180,0);
+
+gfx_r=0.5; gfx_g=1; gfx_b=0; gfx_a=1;
+gfx_x = 0; gfx_y = size;
+gfx_drawnumber(ph*180,0);

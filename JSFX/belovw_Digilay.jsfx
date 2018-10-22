@@ -1,0 +1,230 @@
+desc: Digilay
+version: 2.22
+changelog: init commit to ReaPack
+author: Vladimir Belov, Witti, Lubomir Ivanov
+website: http://rmmedia.ru/threads/107704/
+
+// (C) 2012, Vladimir Belov  -Delay
+// (C) 2012, Witti           -Limiter
+// (C) 2008, Lubomir Ivanov  -Filter
+//
+// 31.01.2014 V2.21
+// NO WARRANTY IS GRANTED. THIS PLUG-IN IS PROVIDED ON AN "AS IS" BASIS, WITHOUT
+// WARRANTY OF ANY KIND. NO LIABILITY IS GRANTED, INCLUDING, BUT NOT LIMITED TO,
+// ANY DIRECT OR INDIRECT,  SPECIAL,  INCIDENTAL OR CONSEQUENTIAL DAMAGE ARISING
+// OUT OF  THE  USE  OR INABILITY  TO  USE  THIS PLUG-IN,  COMPUTER FAILTURE  OF
+// MALFUNCTION INCLUDED.  THE USE OF THE SOURCE CODE,  EITHER  PARTIALLY  OR  IN
+// TOTAL, IS ONLY GRANTED,  IF USED IN THE SENSE OF THE AUTHOR'S INTENTION,  AND
+// USED WITH ACKNOWLEDGEMENT OF THE AUTHOR. FURTHERMORE IS THIS PLUG-IN A  THIRD
+// PARTY CONTRIBUTION,  EVEN IF INCLUDED IN REAPER(TM),  COCKOS INCORPORATED  OR
+// ITS AFFILIATES HAVE NOTHING TO DO WITH IT.  LAST BUT NOT LEAST, BY USING THIS
+// PLUG-IN YOU RELINQUISH YOUR CLAIM TO SUE IT'S AUTHOR, AS WELL AS THE CLAIM TO
+// ENTRUST SOMEBODY ELSE WITH DOING SO.
+//
+//******************************************************************************
+//Reference : Apple.com AU tutorial (port from C++)
+//******************************************************************************
+
+
+slider1:0<0,2,1{Stereo,Cross,Ping-Pong}>Mode
+slider2:0<0,1000,1>Delay (ms) 0 - beat sync
+slider3:3<0,7,1{2,1,1/2,1/4,1/8,1/16,1/32,1/64}>Delay 
+slider4:1<0,2,1{Dot,1,Trio}>Variation
+slider5:1<0.5,1.5,0.01>unsync
+slider6:-20<-60,0,1>FeedBack dB    (-60 = noun FB )
+slider7:-0<-1,1,0.01>Damping L<-0->R
+slider8:-1<-1,1,0.01>Direction       
+slider9:1<0,1,0.01>Dry <<- Balance ->> Wet
+slider10:0<0,1,1>-
+slider11:1<0,1,1{Pre Filter,Post Filter}>FB Position
+slider12:70<0,100,0.05>Hight Cutoff (Scale)
+slider13:0<-25,25,0.05>Res (dB)
+slider14:1<0,1,1{Low Cut off,Low Cut on}>-Low Cut on/off
+slider15:36<0,100,0.05>Low Cutoff (Scale)
+slider16:0<-25,25,0.05>Res (dB)
+slider17:-
+slider18:0<0,100,0.05>-Low Border
+slider19:100<0,100,0.05>-Hight Border
+
+@init
+ext_noinit=0;
+
+mX1l=mX2l=mY1l=mY2l=mX1r=mX2r=mY1r=mY2r=0;
+nX1l=nX2l=nY1l=nY2l=nX1r=nX2r=nY1r=nY2r=0;
+
+transfer_A = (1/300)-1;
+transfer_B = 1 * pow(1,-transfer_A);
+
+attack = exp(-1/(0.5/1000*srate));
+release = exp(-1/(300/1000*srate));
+envelope_decay = exp(-1/(100/1000*srate));
+
+
+@slider
+slider6==-60 ? fb=0 : fb=10^(slider6/20);
+
+slider1==2 ?
+  (
+  fbl=fb^(0.5+slider7/2);
+  fbr=fb^(0.5-slider7/2)  ): 
+
+  (
+  fbl=fb*(1+min(0,0-slider7))^0.5;
+  fbr=fb*(1+min(0,slider7))^0.5 );
+
+slider9 < 0 ? slider9=0;
+slider9 > 1 ? slider9=1;
+wet=slider9 ; dry=1-slider9;
+
+// Directions
+l=0.5-slider8/2;
+r=0.5+slider8/2;
+kl=wet*l;
+kr=wet*r;
+
+//frequency
+sxh = 16+slider18*1.20103+slider12*1.20103*(slider19-slider18)/100;
+cxh = floor(exp(sxh*log(1.059))*8.17742);
+resh = slider13+1.5;
+
+sxl = 16+slider18*1.20103+slider15*1.20103*(slider19-slider18)/100;
+cxl = floor(exp(sxl*log(1.059))*8.17742);
+resl = slider16+1.5;
+
+//coefficients
+cutoffh = 2 * cxh / srate;
+resh = pow(10, 0.05 * -resh);
+k = 0.5 * resh * sin($pi * cutoffh);
+c1 = 0.5 * (1 - k) / (1 + k);
+c2 = (0.5 + c1) * cos($pi * cutoffh);
+c3 = (0.5 + c1 - c2) * 0.25;
+    
+mA0 = 2 * c3;
+mA1 = 4 * c3;
+mA2 = 2 * c3;
+mB1 = 2 * -c2;
+mB2 = 2 * c1;
+
+cutoffl = 2 * cxl / srate;
+resl = pow(10, 0.05 * -resl);
+k = 0.5 * resl * sin($pi * cutoffl);
+c1 = 0.5 * (1 - k) / (1 + k);
+c2 = (0.5 + c1) * cos($pi * cutoffl);
+c3 = (0.5 + c1 + c2) * 0.25;
+    
+nA0 = 2 * c3;
+nA1 =-4 * c3;
+nA2 = 2 * c3;
+nB1 = 2 * -c2;
+nB2 = 2 * c1;
+@block
+beat=60*srate/tempo;
+
+//beat or ms
+slider2==0 ?
+ blenght=beat*8/(1.5^(slider4-1)*2^slider3):
+ blenght=abs(slider2*srate/1000);
+
+//temp var
+d =floor(blenght*slider5);
+d2=blenght*2-d;
+
+@sample
+inl=spl0;
+inr=spl1;
+
+  //  Stereo
+  slider1==0 ?
+    (
+    bl[0] = inl + bl[0]*fbl;
+    br[d] = inr + br[d]*fbr  );
+
+  //  Cross
+  slider1==1 ?
+    (
+    bt=bl[0];
+    bl[0] = inr + br[d]*fbl;
+    br[d] = inl + bt   *fbr  );
+
+  //  Ping-Pong Delay
+  slider1==2 ? 
+
+    (
+    //feddback
+    bt=bl[0];
+    bl[0] = br[d]*fbl+(inl+inr)/2;
+    br[d] = bt   *fbr         );
+
+//counts
+bl+=1; bl>=d   ? bl=0;
+br+=1; br>=d2  ? br=0;
+
+//filter
+flil = bl[0];
+flir = br[d];
+
+flol = mA0*flil + mA1*mX1l + mA2*mX2l - mB1*mY1l - mB2*mY2l;
+mX2l = mX1l;
+mX1l = flil;
+mY2l = mY1l;
+mY1l = flol;
+
+flor = mA0*flir + mA1*mX1r + mA2*mX2r - mB1*mY1r - mB2*mY2r;
+mX2r = mX1r;
+mX1r = flir;
+mY2r = mY1r;
+mY1r = flor;
+
+slider14 == 1 ? (
+fll  = flol;
+flol = nA0*fll + nA1*nX1l + nA2*nX2l - nB1*nY1l - nB2*nY2l;
+nX2l = nX1l;
+nX1l = fll;
+nY2l = nY1l;
+nY1l = flol;
+
+flr  = flor;
+flor = nA0*flr + nA1*nX1r + nA2*nX2r - nB1*nY1r - nB2*nY2r;
+nX2r = nX1r;
+nX1r = flr;
+nY2r = nY1r;
+nY1r = flor;
+);
+
+det = max(abs(flol),abs(flor));
+deti= max(abs(flil),abs(flir));
+det += 0.000000000001;
+deti+= 0.000000000001;
+env = det >= env ? det : det+envelope_decay*(env-det);
+envi= deti>= envi? deti: deti+envelope_decay*(envi-deti);
+envV=env/envi;
+transfer_gain = envV!=1 ? pow(envV,transfer_A):1;
+gain = transfer_gain < gain ?
+
+ transfer_gain+attack *(gain-transfer_gain) : 
+ transfer_gain+release*(gain-transfer_gain);
+
+flol *= gain;
+flor *= gain;
+
+slider11 == 1 ? (
+bl[0] = flol;
+br[d] = flor;
+                );
+
+//out
+spl0 = inl*dry + flol*kl + flor*kr;
+spl1 = inr*dry + flor*kl + flol*kr;
+
+
+@gfx 1 1
+gfx_x=gfx_y=5;
+gfx_lineto(gfx_x, gfx_y,0);
+gfx_r=gfx_b=0;
+gfx_g=gfx_a=1;
+gfx_drawstr("FL = ");
+gfx_drawnumber(cxl,0);
+gfx_drawstr(" Hz     ");
+gfx_drawstr("FH = ");
+gfx_drawnumber(cxh,0);
+gfx_drawstr(" Hz   ");
