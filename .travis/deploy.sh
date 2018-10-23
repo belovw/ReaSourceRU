@@ -12,7 +12,7 @@ ssh-add deploy_key
 
 git config push.default simple
 git config user.name 'ReaSourceRU Bot'
-git config user.email 'reasourceru-bot@cfillion.ca'
+git config user.email 'reasourceru@gmail.com'
 git remote add deploy 'git@github.com:ReaSourceRU/ReaSourceRU.git'
 
 git fetch --unshallow || true
