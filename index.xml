@@ -14,7 +14,7 @@
       </metadata>
       <version name="1.0" author="Archie" time="2018-10-21T06:36:59Z">
         <changelog><![CDATA[init]]></changelog>
-        <source main="main">https://github.com/ReaScriptsRU/ReaScriptsRU/raw/bff87eb3f597131405348c79f871fe9cc224adf4/Items%20Editing/Archie_Split%20selected%20items%20under%20mouse%20cursor%20(select%20left).lua</source>
+        <source main="main">https://github.com/ReaSourceRU/ReaSourceRU/raw/bff87eb3f597131405348c79f871fe9cc224adf4/Items%20Editing/Archie_Split%20selected%20items%20under%20mouse%20cursor%20(select%20left).lua</source>
       </version>
     </reapack>
   </category>
@@ -25,7 +25,7 @@
       </metadata>
       <version name="2.22" author="Vladimir Belov, Witti, Lubomir Ivanov" time="2018-10-22T19:39:09Z">
         <changelog><![CDATA[init commit to ReaPack]]></changelog>
-        <source>https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_Digilay.jsfx</source>
+        <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_Digilay.jsfx</source>
       </version>
     </reapack>
     <reapack name="belovw_ORTF panner.jsfx" type="effect" desc="ORTF panner">
@@ -34,7 +34,7 @@
       </metadata>
       <version name="1.1" author="Vladimir Belov" time="2018-10-22T19:39:09Z">
         <changelog><![CDATA[init commit to ReaPack]]></changelog>
-        <source>https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_ORTF%20panner.jsfx</source>
+        <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_ORTF%20panner.jsfx</source>
       </version>
     </reapack>
     <reapack name="belovw_Stereo Imager.jsfx" type="effect" desc="Stereo Imager">
@@ -43,7 +43,7 @@
       </metadata>
       <version name="1.1" author="Vladimir Belov" time="2018-10-22T19:39:09Z">
         <changelog><![CDATA[init commit to ReaPack]]></changelog>
-        <source>https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_Stereo%20Imager.jsfx</source>
+        <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/belovw_Stereo%20Imager.jsfx</source>
       </version>
     </reapack>
     <reapack name="Oleynik_Parameter Curve Modulation.jsfx" type="effect" desc="Parameter Curve Modulation">
@@ -52,7 +52,7 @@
       </metadata>
       <version name="5" author="Aleksandr Oleynik" time="2018-10-22T19:39:09Z">
         <changelog><![CDATA[init commit to ReaPack]]></changelog>
-        <source>https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/Oleynik_Parameter%20Curve%20Modulation.jsfx</source>
+        <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/Oleynik_Parameter%20Curve%20Modulation.jsfx</source>
       </version>
     </reapack>
   </category>
@@ -73,7 +73,7 @@
         <link rel="website">https://rmmedia.ru/threads/129959/</link>
       </metadata>
       <version name="4.3" author="Oleynik" time="2018-10-22T19:39:09Z">
-        <source main="main">https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/Various/Oleynik_Realtime%20performance%20optimization.lua</source>
+        <source main="main">https://github.com/ReaSourceRU/ReaSourceRU/raw/0a50e780c902768350b7acade35c443f50057b9f/Various/Oleynik_Realtime%20performance%20optimization.lua</source>
       </version>
     </reapack>
   </category>
