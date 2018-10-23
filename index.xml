@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="ReaScriptRU" commit="7e9e91dd48109abdea279555f34d473f3bbded53">
+<index version="1" name="ReaScriptRU" commit="c6963a0e0951b85eb6b9cc18ed6666bc694088f1">
   <category name="Items Editing">
     <reapack name="Archie_Split selected items under mouse cursor (select left).lua" type="script" desc="Split selected items under mouse cursor (select left)">
       <metadata>
@@ -53,6 +53,17 @@
       <version name="5" author="Aleksandr Oleynik" time="2018-10-22T19:39:09Z">
         <changelog><![CDATA[init commit to ReaPack]]></changelog>
         <source>https://github.com/ReaScriptsRU/ReaScriptsRU/raw/0a50e780c902768350b7acade35c443f50057b9f/JSFX/Oleynik_Parameter%20Curve%20Modulation.jsfx</source>
+      </version>
+    </reapack>
+  </category>
+  <category name="Themes">
+    <reapack name="ASM.theme" type="theme" desc="2017">
+      <metadata>
+        <link rel="website" href="http://forum.cockos.com/showthread.php?t=205168">Forum Thread</link>
+        <link rel="screenshot" href="http://stash.reaper.fm/33220/ReaperTheme.jpg">Arrange Window</link>
+      </metadata>
+      <version name="1.0" author="Ameliance SkyMusic" time="2018-10-23T19:17:00Z">
+        <source file="ASM_2017.ReaperThemeZip">https://github.com/ReaSourceRU/ReaSourceRU/raw/c6963a0e0951b85eb6b9cc18ed6666bc694088f1/Themes/ASM_2017.ReaperThemeZip</source>
       </version>
     </reapack>
   </category>
