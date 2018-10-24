@@ -2,13 +2,13 @@
 // This effect Copyright (C) 2004 and later Cockos Incorporated
 // License: GPL - http://www.gnu.org/licenses/gpl.html
 //
-/* V1.11 from 02.10.2018
-          Matched BPF by MARTIN VICANEK
-          Optimized and redused code
-          
-   V1.12 from 24.10.2018
-          Optimization led ini
-*/
+// V1.11 from 02.10.2018
+//        Matched BPF by MARTIN VICANEK
+//        Optimized and redused code
+//        
+// V1.12 from 24.10.2018
+//        Optimization led ini
+//
 
 desc: ReaSpect V1.12
 
