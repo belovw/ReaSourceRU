@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<index version="1" name="ReaSourceRU" commit="345be2ce024bec1e2260bc114a1b4c5fabc746a4">
+<index version="1" name="ReaSourceRU" commit="657fd0f1cf0fa7e92a193baf56837452edc5273d">
   <category name="Items Editing">
     <reapack name="Archie_Split selected items under mouse cursor (select left).lua" type="script" desc="Split selected items under mouse cursor (select left)">
       <metadata>
@@ -46,6 +46,12 @@
 Optimization led ini
 Optimized and reduсed code]]></changelog>
         <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/345be2ce024bec1e2260bc114a1b4c5fabc746a4/JSFX/belovw_ReaSpect.jsfx</source>
+      </version>
+      <version name="1.13" author="Vladimir Belov" time="2018-10-31T11:35:39Z">
+        <changelog><![CDATA[Matched BPF by MARTIN VICANEK
+Optimization led ini
+Optimized and reduсed code]]></changelog>
+        <source>https://github.com/ReaSourceRU/ReaSourceRU/raw/485d7fbec49c3e30e621b2fcdf9c992256f79b0c/JSFX/belovw_ReaSpect.jsfx</source>
       </version>
     </reapack>
     <reapack name="belovw_Stereo Imager.jsfx" type="effect" desc="Stereo Imager">
