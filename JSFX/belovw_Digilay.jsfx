@@ -122,8 +122,8 @@ beat=60*srate/tempo;
 
 //beat or ms
 slider2==0 ?
- blenght=beat*8/(1.5^(slider4-1)*2^slider3):
- blenght=abs(slider2*srate/1000);
+ blenght=floor(beat*8/(1.5^(slider4-1)*2^slider3)):
+ blenght=floor(slider2*srate/1000);
 
 //temp var
 d =floor(blenght*slider5);
