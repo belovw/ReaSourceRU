@@ -1,6 +1,6 @@
 desc: Stereo Imager
-version: 1.1
-changelog: init commit to ReaPack
+version: 1.2 26.03.2020 
+changelog: Auto Gain control for Ganiometr
 author: Vladimir Belov
 website: https://rmmedia.ru/threads/105176
 
@@ -44,6 +44,10 @@ PHASEUPDATERATE = srate/8;
 n = 0;
 phC = 0;
 ph = 0;
+
+aa=exp(-log(9)*1000/srate/4);
+ar=exp(-log(9)*1000/srate/2000);
+c=1;
 
 @slider
 width=slider2;
@@ -91,6 +95,8 @@ s0 == -1 && s1 == 1 ? angle += 6.283185307;
 spl1 == 0 ? spl0 > 0 ? angle = 1.570796327 : angle = 4.71238898;
 spl0 == 0 ? spl1 > 0 ? angle = 0 : angle = 3.141592654;
 radius = sqrt( sqr(spl0)+sqr(spl1) ) ;
+radius*c > 0.8 ? (c=c*aa) : (c=c/ar);
+radius*=c;
 angle -= rot;
 vert = 0[b] = cos(angle)*radius;
 horiz = off[b] = sin(angle)*radius;
@@ -130,7 +136,7 @@ while (
   gfx_a=0.33;
   gfx_x=sizeH+0[i]*sizeDSqr05;
   gfx_y=sizeH-off[i]*sizeDSqr05;
-  gfx_setpixel(0.5,1,0);
+  gfx_setpixel(0.6,1,0);
   ):(
     slider5 == LINES ? (
       gfx_x=x; gfx_y=y;
